@@ -1,0 +1,51 @@
+---
+title: "Introduction to rshiny"
+author: "Heather Welch"
+date: "9/14/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Creating a **shiny app:** best practices.
+
+1. create a new dirctory: "app name".
+2. create a new directory: "app name"/data.
+3. place any necessary data in "app name"/data.
+4. create new r script "app name"/app.R (shiny apps need to be named this)
+
+Creating a **shiny app:** code structure.
+
+1. load all your libraries.
+2. load all your data.
+3. UI(): User Interface. This code block defines app layout and inputs.
+4. Server(): This code block defines what to do with inputs. This is the workhorse of your app.
+
+Lets take a look.
+```{r}
+# 1. load all your libraries.
+library(shiny)
+
+# 2. load all your data.
+dataset=read.csv(data/bycatch_data.csv)
+
+# 3. UI{}: User Interface. This code block defines app layout and inputs.
+ui <-shinyUI(
+  
+)
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
