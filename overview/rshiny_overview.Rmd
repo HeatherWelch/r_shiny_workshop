@@ -1,5 +1,5 @@
 ---
-title: "Introduction to rshiny"
+title: "Building an interactive histogram in shiny"
 author: "Heather Welch"
 date: "9/14/2017"
 output: html_document
@@ -9,8 +9,6 @@ runtime: shiny
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## R Markdown
 
 Creating a **shiny app:** best practices.
 
@@ -28,14 +26,26 @@ Creating a **shiny app:** code structure.
 5. Run the application
 
 Lets take a look.
-```{r}
+
+```{r,message=FALSE}
 # 1. load all your libraries.
 library(shiny)
 library(rsconnect)
+```
 
+**Description:**
+
+the **shiny** package loads all the interactive tools, the **rsconnect** package allows apps to be published
+
+```{r}
 # 2. load all your data.
 dataset=read.csv("data/bycatch_data.csv")
+```
 
+**Description:**
+
+Your app will reference all pathways to itself (i.e. the parent folder), therefor pathways can be defined in relation. Always nest items called by your app within the parent folder
+```{r}
 # 3. UI{}: User Interface. This code block defines app layout and inputs.
 ui <-shinyUI(fluidPage(
   selectInput(inputId = "column",
@@ -44,7 +54,17 @@ ui <-shinyUI(fluidPage(
   
   plotOutput(outputId = "main_plot")
 ))
+```
 
+**Description:**
+
+**fluidpage()** turns your app layout into a grid of rows and columns, so that you can define where in the grid each widget (shiny element) is placed.  
+**selectInput()** is the call for an interactive input box, where the end user can make a selection from pre-defined choices.  
+**inputId** is an id that will be used to call up the end user's selection in the server() section.  
+**choices** defines the pre-defined choices from which the user can select. These are three columns in the bycatch dataset.  
+**plotOutput** creates a place holder for our desired output (in this case a plot), which we will build upon in the server() section.  
+
+```{r}
 # 4. Server(): This code block defines what to do with inputs. This is the workhorse of your app.
 server <- shinyServer(function(input, output) {
   
@@ -57,9 +77,27 @@ server <- shinyServer(function(input, output) {
   })
   
 })
+```
 
+**Description:**
+
+**output"dollar sign"main_plot** references the place holder output we built in the UI() section  
+**renderPlot** creates a reactive plot that's responsive to end user selection  
+**input$column** grabs the id we created with inputId in the UI() section  
+**hist()** is regular r code for building a histogram. In this case the histogram is reactive to the end user's selection (i.e. the selected dataframe column)  
+```{r}
 # 5. Run the application
 shinyApp(ui = ui, server = server)
-
-
 ```
+
+
+
+metadata  
+This app was created within an rmarkdown document using runtime: shiny to allow for interactive components  
+The completed .Rmd was published to shinyapps.io using rsconnect::deployApp  
+**deploying your app**
+1. create a shinapps.io account  
+2. click on the tokens tab, click "show"
+3. copy and run authorization in r, e.g.  
+rsconnect::setAccountInfo(name='heatherwelch', token='B2988C7352F4325DBE32245C056421D0', secret='DjQTn0FsvWCwu6bxLCn236pR7hdf82haJUXu6Tyg')  
+4. setwd to app dir, run rsconnect::deployApp()
