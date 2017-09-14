@@ -1,0 +1,21 @@
+---
+title: "Interactive Rmarkdown"
+author: "Heather Welch"
+date: "9/13/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE,echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Trialing embedding a published shiny app into an rmarkdown document
+
+Historical EcoCast Test
+
+```{r ,echo=FALSE}
+
+library(knitr)
+knitr::include_url("https://heatherwelch.shinyapps.io/rshinyapp_historical/",height="1200px")
+```
+
