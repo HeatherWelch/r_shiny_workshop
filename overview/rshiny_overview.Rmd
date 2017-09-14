@@ -3,6 +3,7 @@ title: "Introduction to rshiny"
 author: "Heather Welch"
 date: "9/14/2017"
 output: html_document
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -24,28 +25,41 @@ Creating a **shiny app:** code structure.
 2. load all your data.
 3. UI(): User Interface. This code block defines app layout and inputs.
 4. Server(): This code block defines what to do with inputs. This is the workhorse of your app.
+5. Run the application
 
 Lets take a look.
 ```{r}
 # 1. load all your libraries.
 library(shiny)
+library(rsconnect)
 
 # 2. load all your data.
-dataset=read.csv(data/bycatch_data.csv)
+dataset=read.csv("data/bycatch_data.csv")
 
 # 3. UI{}: User Interface. This code block defines app layout and inputs.
-ui <-shinyUI(
+ui <-shinyUI(fluidPage(
+  selectInput(inputId = "column",
+              label = "DataFrame column",
+              choices = c("TOTAL.FISHERY.BYCATCH","TOTAL.FISHERY.LANDINGS","FISHERY.BYCATCH.RATIO")),
   
-)
+  plotOutput(outputId = "main_plot")
+))
+
+# 4. Server(): This code block defines what to do with inputs. This is the workhorse of your app.
+server <- shinyServer(function(input, output) {
+  
+  output$main_plot <- renderPlot({
+    col=input$column
+    index=as.numeric(grep(col,colnames(dataset)))
+    hist(dataset[[index]],
+         xlab = col,
+         main = paste0("Histogram of ",col))
+  })
+  
+})
+
+# 5. Run the application
+shinyApp(ui = ui, server = server)
+
 
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

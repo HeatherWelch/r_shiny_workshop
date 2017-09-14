@@ -136,17 +136,42 @@ $(document).ready(function () {
 <ol style="list-style-type: decimal">
 <li>load all your libraries.</li>
 <li>load all your data.</li>
-<li>UI{}: User Interface. This code block defines app layout and inputs.</li>
-<li>Server{}: This code block defines what to do with inputs. This is the workhorse of your app.</li>
+<li>UI(): User Interface. This code block defines app layout and inputs.</li>
+<li>Server(): This code block defines what to do with inputs. This is the workhorse of your app.</li>
+<li>Run the application</li>
 </ol>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<p>Lets take a look.</p>
+<pre class="r"><code># 1. load all your libraries.
+library(shiny)
+
+# 2. load all your data.
+dataset=read.csv(&quot;data/bycatch_data.csv&quot;)
+
+# 3. UI{}: User Interface. This code block defines app layout and inputs.
+ui &lt;-shinyUI(fluidPage(
+  selectInput(inputId = &quot;column&quot;,
+              label = &quot;DataFrame column&quot;,
+              choices = c(&quot;TOTAL.FISHERY.BYCATCH&quot;,&quot;TOTAL.FISHERY.LANDINGS&quot;,&quot;FISHERY.BYCATCH.RATIO&quot;)),
+  
+  plotOutput(outputId = &quot;main_plot&quot;)
+))
+
+# 4. Server(): This code block defines what to do with inputs. This is the workhorse of your app.
+server &lt;- shinyServer(function(input, output) {
+  
+  output$main_plot &lt;- renderPlot({
+    col=input$column
+    index=as.numeric(grep(col,colnames(dataset)))
+    hist(dataset[[index]],
+         xlab = col,
+         main = paste0(&quot;Histogram of &quot;,col))
+  })
+  
+})
+
+# 5. Run the application
+shinyApp(ui = ui, server = server)</code></pre>
+<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 </div>
 <div id="including-plots" class="section level2">
 <h2>Including Plots</h2>
