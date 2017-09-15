@@ -10,14 +10,14 @@ runtime: shiny
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Creating a **shiny app:** best practices.
+## Creating a **shiny app:** best practices.
 
 1. create a new dirctory: "app_name".
 2. create a new directory: "app_name"/data.
 3. place any necessary data in "app_name"/data.
 4. create new r script "app_name"/app.R (shiny apps need to be named this)
 
-Creating a **shiny app:** code structure.
+## Creating a **shiny app:** code structure.
 
 1. load all your libraries.
 2. load all your data.
@@ -96,8 +96,8 @@ metadata
 This app was created within an rmarkdown document using runtime: shiny to allow for interactive components  
 The completed .Rmd was published to shinyapps.io using rsconnect::deployApp  
 **deploying your app**
-1. create a shinapps.io account  
-2. click on the tokens tab, click "show"
-3. copy and run authorization in r, e.g.  
-rsconnect::setAccountInfo(name='heatherwelch', token='B2988C7352F4325DBE32245C056421D0', secret='DjQTn0FsvWCwu6bxLCn236pR7hdf82haJUXu6Tyg')  
-4. setwd to app dir, run rsconnect::deployApp()
+1. create a shinapps.io account    
+2. click on the tokens tab, click "show"  
+3. copy and run authorization in r, e.g.    
+rsconnect::setAccountInfo(name='heatherwelch', token='B2988C7352F4325DBE32245C056421D0', secret='DjQTn0FsvWCwu6bxLCn236pR7hdf82haJUXu6Tyg')    
+4. setwd to app dir, run rsconnect::deployApp()  
